@@ -1,0 +1,21 @@
+# Push a tag like v1.0.0 → builds the DMG and publishes it on the Releases page.
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-26 # needs Xcode 26+ (macOS 26 SDK + Icon Composer support in actool)
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build DMG
+        run: VERSION="${GITHUB_REF_NAME#v}" ./make-dmg.sh
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: build/Lumos-*.dmg
+          generate_release_notes: true
