@@ -3,7 +3,7 @@
 # Needs Xcode 26+ (actool compiles the Icon Composer icon).
 set -e
 cd "$(dirname "$0")"
-VERSION=${VERSION:-1.0.0}
+VERSION=${VERSION:-1.0.1}
 BUNDLE_ID=io.github.rombri02.lumos
 APP=build/Lumos.app
 

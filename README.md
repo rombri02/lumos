@@ -26,8 +26,20 @@ headroom for the whole screen.
 
 ## Requirements
 
-- A Mac with an XDR / HDR display (MacBook Pro 14"/16" M1 Pro or later, Pro Display XDR)
 - macOS 26 or later, Apple Silicon
+- A **Liquid Retina XDR** (mini-LED) display. Lumos can only unlock brightness the panel holds
+  in reserve for HDR. Regular displays are already at their physical maximum at 100%.
+
+| Mac / display | Works? |
+|---|---|
+| MacBook Pro 14" / 16" — M1 Pro, M1 Max and later (2021+), incl. M3/M4/M5 14" | ✅ Yes |
+| Pro Display XDR | ✅ Yes |
+| MacBook Air (any) | ❌ No extra brightness available |
+| MacBook Pro 13" (M1, M2) | ❌ |
+| iMac, Studio Display | ❌ |
+| Third-party HDR monitors | ⚠️ Untested |
+
+On an unsupported Mac, Lumos opens a window explaining that the display is not supported and changes nothing.
 
 ## Install
 

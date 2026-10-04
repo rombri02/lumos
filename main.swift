@@ -75,29 +75,34 @@ final class LumosApp: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSWind
         window.isReleasedWhenClosed = false
         window.animationBehavior = .alertPanel
 
-        // Opened by hand with the icon hidden: show the window, otherwise there's no UI at all.
-        // At login (or with the icon visible) stay quietly in the background.
+        refreshScreens()
+        // Opened by hand with the icon hidden (no other UI), or on a Mac without an XDR
+        // display (explain why nothing happens). At login stay quietly in the background.
         let event = NSAppleEventManager.shared().currentAppleEvent
         let atLogin = event?.paramDescriptor(forKeyword: keyAEPropData)?.enumCodeValue == keyAELaunchedAsLogInItem
-        if !model.showIcon && !atLogin { showWindow() }
+        if (!model.showIcon || !model.supported) && !atLogin { showWindow() }
 
         NotificationCenter.default.addObserver(self, selector: #selector(screensChanged),
             name: NSApplication.didChangeScreenParametersNotification, object: nil)
         // Wake resets gamma: re-apply immediately instead of waiting for the 1 s heartbeat.
         NSWorkspace.shared.notificationCenter.addObserver(self, selector: #selector(screensChanged),
             name: NSWorkspace.didWakeNotification, object: nil)
-        refreshScreens()
         listenForBrightnessChanges()
         update()
     }
 
+    // XDR panels report 16x potential EDR headroom; regular displays (MacBook Air, 13" Pro,
+    // iMac...) report 2x, which only exists below max brightness: nothing to unlock there.
+    static let minPotentialHeadroom: CGFloat = 4
+
     private func refreshScreens() {
         hdrScreens = NSScreen.screens.compactMap { screen in
-            guard screen.maximumPotentialExtendedDynamicRangeColorComponentValue > 1,
+            guard screen.maximumPotentialExtendedDynamicRangeColorComponentValue >= LumosApp.minPotentialHeadroom,
                   let id = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? CGDirectDisplayID
             else { return nil }
             return (screen, id)
         }
+        model.supported = !hdrScreens.isEmpty
     }
 
     // macOS pushes brightness changes (keys, Control Center, auto-brightness), so idle Lumos

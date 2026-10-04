@@ -3,7 +3,7 @@
 # themed background (dmg/background.swift), big icons, drag-to-Applications arrow.
 set -e
 cd "$(dirname "$0")"
-export VERSION=${VERSION:-1.0.0}
+export VERSION=${VERSION:-1.0.1}
 ./build.sh
 
 VOL="Lumos"

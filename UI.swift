@@ -31,6 +31,7 @@ import ServiceManagement
     var brightness: Double = 0
     var currentBoost: Double = 1
     var isBoosting: Bool { enabled && currentBoost > 1.001 }
+    var supported = true // false when no connected display has XDR headroom
 
     @ObservationIgnored var onShowIconChange: ((Bool) -> Void)?
     @ObservationIgnored var onQuit: (() -> Void)?
@@ -42,9 +43,13 @@ struct ControlsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             header
-            intensityCard
-                .opacity(model.enabled ? 1 : 0.45)
-                .disabled(!model.enabled)
+            if model.supported {
+                intensityCard
+                    .opacity(model.enabled ? 1 : 0.45)
+                    .disabled(!model.enabled)
+            } else {
+                unsupportedCard
+            }
             settingsCard
             footer
         }
@@ -79,13 +84,33 @@ struct ControlsView: View {
             Toggle("Attivo", isOn: $model.enabled)
                 .toggleStyle(.switch)
                 .labelsHidden()
+                .disabled(!model.supported)
         }
     }
 
     private var statusText: String {
+        if !model.supported { return "Display non supportato" }
         if !model.enabled { return "Disattivato" }
         if model.isBoosting { return String(format: "Luce extra attiva · %.2f×", model.currentBoost) }
         return "Si accende oltre il \(Int(LumosApp.boostStart * 100))% di luminosità"
+    }
+
+    private var unsupportedCard: some View {
+        HStack(alignment: .top, spacing: 12) {
+            Image(systemName: "display.trianglebadge.exclamationmark")
+                .font(.system(size: 22))
+                .symbolRenderingMode(.multicolor)
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Nessun display XDR trovato").font(.subheadline.weight(.semibold))
+                Text("Lumos sblocca la luminosità extra dei display Liquid Retina XDR (MacBook Pro 14\" e 16\" con M1 Pro o successivi) e del Pro Display XDR. Questo display è già al suo massimo.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .padding(14)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .glassEffect(.regular, in: .rect(cornerRadius: 16))
     }
 
     private var intensityCard: some View {
