@@ -16,6 +16,8 @@
   <img src="docs/screenshot.png" width="340" alt="Lumos window">
 </p>
 
+https://github.com/user-attachments/assets/9fb24d8a-1ad4-4773-bd33-b3af7fd1fdab
+
 ## What it does
 
 MacBook Pro mini-LED (Liquid Retina XDR) displays can reach 1000+ nits, but macOS caps normal
