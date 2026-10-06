@@ -4,7 +4,7 @@
 # Release: SIGN_ID="Developer ID Application: ..." NOTARY_PROFILE=notary ./make-dmg.sh
 set -e
 cd "$(dirname "$0")"
-export VERSION=${VERSION:-1.0.1}
+export VERSION=${VERSION:-1.0.2}
 ./build.sh
 
 VOL="Lumos"
