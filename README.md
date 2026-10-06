@@ -9,6 +9,10 @@
 </p>
 
 <p align="center">
+  <a href="https://buymeacoffee.com/rombri"><img src="https://img.shields.io/badge/Buy%20me%20a%20coffee-FFDD00?logo=buymeacoffee&logoColor=black" alt="Buy me a coffee"></a>
+</p>
+
+<p align="center">
   <img src="docs/screenshot.png" width="340" alt="Lumos window">
 </p>
 
@@ -84,6 +88,10 @@ build/Lumos.app/Contents/MacOS/Lumos --selftest   # tone curve / easing checks
 
 Releases are built by GitHub Actions: push a tag like `v1.0.0` and the DMG is attached to the
 release automatically.
+
+## Support
+
+Lumos is free. If it's useful to you, you can [buy me a coffee](https://buymeacoffee.com/rombri) ☕
 
 ## License
 

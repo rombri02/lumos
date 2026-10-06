@@ -1,6 +1,7 @@
 #!/bin/sh
 # Builds Lumos and packs it in build/Lumos-<version>.dmg with a styled install window:
 # themed background (dmg/background.swift), big icons, drag-to-Applications arrow.
+# Release: SIGN_ID="Developer ID Application: ..." NOTARY_PROFILE=notary ./make-dmg.sh
 set -e
 cd "$(dirname "$0")"
 export VERSION=${VERSION:-1.0.1}
@@ -60,4 +61,11 @@ hdiutil detach "$MNT" >/dev/null
 rm -f "$DMG"
 hdiutil convert "$RW" -format UDZO -imagekey zlib-level=9 -o "$DMG" >/dev/null
 rm -rf "$TMP"
+
+# NOTARY_PROFILE = name saved with `xcrun notarytool store-credentials`.
+if [ -n "$NOTARY_PROFILE" ]; then
+    codesign -s "$SIGN_ID" --timestamp "$DMG"
+    xcrun notarytool submit "$DMG" --keychain-profile "$NOTARY_PROFILE" --wait
+    xcrun stapler staple "$DMG"
+fi
 echo "Created $DMG"

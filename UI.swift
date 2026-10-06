@@ -163,6 +163,8 @@ struct ControlsView: View {
         HStack {
             Text("Lumos maxima").font(.caption2).foregroundStyle(.tertiary)
             Spacer()
+            Link("☕ Offrimi un caffè", destination: URL(string: "https://buymeacoffee.com/rombri")!)
+                .font(.caption)
             Button("Esci") { model.onQuit?() }
                 .keyboardShortcut("q")
                 .buttonStyle(.glass)

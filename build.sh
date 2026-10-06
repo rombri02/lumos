@@ -39,7 +39,13 @@ cat > "$APP/Contents/Info.plist" <<EOF
   <key>LSUIElement</key><true/>
 </dict></plist>
 EOF
-codesign -s - --force "$APP" # ad-hoc: required to run on Apple Silicon, not a Developer ID
+# SIGN_ID unset = ad-hoc (local builds). Release: SIGN_ID="Developer ID Application: ..."
+# Hardened runtime + timestamp are required for notarization.
+if [ -n "$SIGN_ID" ]; then
+    codesign -s "$SIGN_ID" --force --options runtime --timestamp "$APP"
+else
+    codesign -s - --force "$APP"
+fi
 echo "Built $APP ($VERSION)"
 
 if [ "$1" = "--install" ]; then
